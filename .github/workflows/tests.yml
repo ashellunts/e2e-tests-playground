@@ -14,5 +14,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
+    - name: run tests
       run: docker build . --file Dockerfile --tag e2e-tests-playground:$(date +%s)
