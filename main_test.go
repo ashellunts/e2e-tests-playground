@@ -9,7 +9,7 @@ import (
 
 func Test(t *testing.T) {
 
-	cmd, err := RunCommand("echo", "hello")
+	cmd, err := RunCommand("echo", "1")
 
 	r := require.New(t)
 	r.NotNil(cmd)
