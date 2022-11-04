@@ -128,7 +128,7 @@ func main() { //nolint:gocognit
 			// Use webrtc.PeerConnectionStateDisconnected if you are interested in detecting faster timeout.
 			// Note that the PeerConnection may come back from PeerConnectionStateDisconnected.
 			fmt.Println("Peer Connection has gone to failed exiting")
-			os.Exit(0)
+			os.Exit(1)
 		}
 	})
 
@@ -144,13 +144,7 @@ func main() { //nolint:gocognit
 		if sendTextErr != nil {
 			panic(sendTextErr)
 		}
-		time.Sleep(time.Second)
-		os.Exit(0)
-	})
-
-	// Register text message handling
-	dataChannel.OnMessage(func(msg webrtc.DataChannelMessage) {
-		fmt.Printf("Message from DataChannel '%s': '%s'\n", dataChannel.Label(), string(msg.Data))
+		time.Sleep(3 * time.Second)
 		os.Exit(0)
 	})
 

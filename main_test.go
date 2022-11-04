@@ -29,7 +29,7 @@ func TestPionToPionExample(t *testing.T) {
 	answer, answer_stdout, answer_stderr := RunProcess("./answer_app", r)
 	offer, offer_stdout, offer_stderr := RunProcess("./offer_app", r)
 
-	time.AfterFunc(3*time.Second, func() {
+	time.AfterFunc(10*time.Second, func() {
 		answer.Process.Kill()
 		offer.Process.Kill()
 	})
