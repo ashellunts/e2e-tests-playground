@@ -1,1 +1,2 @@
-ls | entr -c docker build .
+docker build -t tests .
+docker run --rm tests

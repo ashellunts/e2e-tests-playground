@@ -5,34 +5,52 @@ import (
 	"fmt"
 	"os/exec"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
 
+func RunProcess(proc_name string, r *require.Assertions) (*exec.Cmd, *bytes.Buffer, *bytes.Buffer) {
+	answer_process := exec.Command(proc_name)
+
+	var answer_stdout, answer_stderr bytes.Buffer
+	answer_process.Stdout = &answer_stdout
+	answer_process.Stderr = &answer_stderr
+
+	r.NoError(answer_process.Start())
+
+	return answer_process, &answer_stdout, &answer_stderr
+}
+
 func Test(t *testing.T) {
-	r := require.New(t)
 
-	cmd := exec.Command("./answer_app")
-	var outb, errb bytes.Buffer
-	cmd.Stdout = &outb
-	cmd.Stderr = &errb
-	err := cmd.Start()
-	r.NoError(err)
+	t.Run("ajfkjalks", func(t *testing.T) {
+		r := require.New(t)
 
-	cmd2 := exec.Command("./offer_app")
-	var outb2, errb2 bytes.Buffer
-	cmd2.Stdout = &outb2
-	cmd2.Stderr = &errb2
-	err2 := cmd2.Start()
-	r.NoError(err2)
+		answer, answer_stdout, answer_stderr := RunProcess("./answer_app", r)
+		time.Sleep(time.Second)
+		offer, offer_stdout, offer_stderr := RunProcess("./offer_app", r)
 
-	exit1 := cmd.Wait()
+		time.AfterFunc(3*time.Second, func() {
+			answer.Process.Kill()
+			offer.Process.Kill()
+		})
 
-	exit2 := cmd2.Wait()
+		offer_exit_err := offer.Wait()
+		answer_exit_err := answer.Wait()
 
-	fmt.Println("out offer:", outb2.String(), "err offer:", errb2.String())
-	fmt.Println("out answer:", outb.String(), "err answer:", errb.String())
+		PrintOutput(offer_stdout, offer_stderr, answer_stdout, answer_stderr)
 
-	r.NoError(exit1)
-	r.NoError(exit2)
+		r.NoError(offer_exit_err)
+		r.NoError(answer_exit_err)
+	})
+}
+
+func PrintOutput(offer_stdout *bytes.Buffer, offer_stderr *bytes.Buffer, answer_stdout *bytes.Buffer, answer_stderr *bytes.Buffer) {
+	fmt.Println("offer stdout:", offer_stdout.String())
+	fmt.Println("offer stderr:", offer_stderr.String())
+
+	fmt.Print("\n\n")
+	fmt.Println("answer stdout:", answer_stdout.String())
+	fmt.Println("answer stderr:", answer_stderr.String())
 }
