@@ -13,4 +13,4 @@ RUN go build -o offer_app ./offer
 RUN go build -o answer_app ./answer
 
 ADD main_test.go /test/
-CMD go test -v -timeout 10s .
+CMD go test -v -timeout 20s .
