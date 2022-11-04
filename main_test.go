@@ -27,7 +27,6 @@ func TestPionToPionExample(t *testing.T) {
 	r := require.New(t)
 
 	answer, answer_stdout, answer_stderr := RunProcess("./answer_app", r)
-	time.Sleep(time.Second)
 	offer, offer_stdout, offer_stderr := RunProcess("./offer_app", r)
 
 	time.AfterFunc(3*time.Second, func() {
