@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: run tests
-      run: ./run_tests
+      run: ./run_tests_100_times ./run_tests
