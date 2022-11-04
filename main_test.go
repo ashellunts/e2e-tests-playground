@@ -22,28 +22,26 @@ func RunProcess(proc_name string, r *require.Assertions) (*exec.Cmd, *bytes.Buff
 	return answer_process, &answer_stdout, &answer_stderr
 }
 
-func Test(t *testing.T) {
+func TestPionToPionExample(t *testing.T) {
 
-	t.Run("ajfkjalks", func(t *testing.T) {
-		r := require.New(t)
+	r := require.New(t)
 
-		answer, answer_stdout, answer_stderr := RunProcess("./answer_app", r)
-		time.Sleep(time.Second)
-		offer, offer_stdout, offer_stderr := RunProcess("./offer_app", r)
+	answer, answer_stdout, answer_stderr := RunProcess("./answer_app", r)
+	time.Sleep(time.Second)
+	offer, offer_stdout, offer_stderr := RunProcess("./offer_app", r)
 
-		time.AfterFunc(3*time.Second, func() {
-			answer.Process.Kill()
-			offer.Process.Kill()
-		})
-
-		offer_exit_err := offer.Wait()
-		answer_exit_err := answer.Wait()
-
-		PrintOutput(offer_stdout, offer_stderr, answer_stdout, answer_stderr)
-
-		r.NoError(offer_exit_err)
-		r.NoError(answer_exit_err)
+	time.AfterFunc(3*time.Second, func() {
+		answer.Process.Kill()
+		offer.Process.Kill()
 	})
+
+	offer_exit_err := offer.Wait()
+	answer_exit_err := answer.Wait()
+
+	PrintOutput(offer_stdout, offer_stderr, answer_stdout, answer_stderr)
+
+	r.NoError(offer_exit_err)
+	r.NoError(answer_exit_err)
 }
 
 func PrintOutput(offer_stdout *bytes.Buffer, offer_stderr *bytes.Buffer, answer_stdout *bytes.Buffer, answer_stderr *bytes.Buffer) {
